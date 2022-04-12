@@ -1,0 +1,270 @@
+#Look up the round() and abs() functions on the Internet, and find out what they do. Experiment with them in the interactive way
+
+int_num = -25
+
+float_num = -10.50
+
+complex_num = (3+4j)
+
+
+print("The absolute value of an integer number is:", abs(int_num))
+print("The absolute value of a float number is:", abs(float_num))
+print("The magnitude of the complex number is:", abs(complex_num))
+
+a = 5.5789
+b = 2.34
+print(" The roundup value of a float number is : ", round(a, 2))
+print(" The roundup value of a float number is : ", round(b))
+
+
+
+#Write a function named collatz() that has one parameter named number. 
+#If number is even, then collatz() should print number // 2 and return this value. 
+#If number is odd, then collatz() should print and return 3 * number + 1.
+
+#Then write a program that lets the user type in an integer and that keeps calling collatz() on that number until the function returns the value 1. (Amazingly enough, this sequence actually works for any integer—sooner or later, using this sequence, you’ll arrive at 1! Even mathematicians aren’t sure why. Your program is exploring what’s called the Collatz sequence, sometimes called “the simplest impossible math problem.”)
+
+
+CODE:
+
+x=int(input("enter a number: "))
+
+def collatz(number):
+    if number % 2 == 0:
+        value= number/2
+        print(value)
+        if value != 1:
+            collatz(value)
+        
+    elif number % 2 == 1:
+        value= 3*number+1
+        print(value)
+        if value != 1:
+            collatz(value)
+    else:
+        print(1)
+        
+
+collatz(x)
+
+--------------------------------------------------------------------------------------------------------------------------
+
+#s = ['apples', 'bananas', 'tofu', 'cats']
+
+#Write a function that takes a list value as an argument and returns a string with all the items separated by a comma and a space, with
+ #and inserted before the last item.
+
+#For example, passing the previous s list to the function would return 'apples, bananas, tofu, and cats'. But your function should be
+ #able to work with any list value passed to it.
+
+
+def listToString(s):
+    # initialize an empty string
+    str1 = " "
+    final = " "
+    # traverse in the string
+    for ele in s:
+        str1 += ele
+
+    index = str1.find('cats')
+    final = str1[:index] + 'and ' + str1[index:]
+    print("'",final,"'")
+
+
+s = ['apples', ', bananas' ', tofu' ', cats ']
+listToString(s)
+
+---------------------------------------------------------------------------------------------------------------------------
+
+"""
+['.', 'O', 'O', '.', '.', '.'],        
+ ['O', 'O', 'O', 'O', '.', '.'],        
+ ['O', 'O', 'O', 'O', 'O', '.'],        
+ ['.', 'O', 'O', 'O', 'O', 'O'],
+ ['O', 'O', 'O', 'O', 'O', '.'],
+ ['O', 'O', 'O', 'O', '.', '.'],
+ ['.', 'O', 'O', '.', '.', '.'],
+ ['.', '.', '.', '.', '.', '.']]
+
+You can think of grid[x][y] as being the character at the x- and y-coordinates of a “picture” drawn with text characters. The (0, 0) origin will be in the upper-left corner, the x-coordinates increase going right, and the y-coordinates increase going down.
+
+Copy the previous grid value, and write code that uses it to print the image.
+
+..OO.OO..
+.OOOOOOO.
+.OOOOOOO.
+..OOOOO..
+...OOO...
+....O....
+
+"""
+
+
+
+
+grid = [['.', '.', '.', '.', '.', '.'],
+ ['.', 'O', 'O', '.', '.', '.'],
+ ['O', 'O', 'O', 'O', '.', '.'],
+ ['O', 'O', 'O', 'O', 'O', '.'],
+ ['.', 'O', 'O', 'O', 'O', 'O'],
+ ['O', 'O', 'O', 'O', 'O', '.'],
+ ['O', 'O', 'O', 'O', '.', '.'],
+ ['.', 'O', 'O', '.', '.', '.'],
+ ['.', '.', '.', '.', '.', '.']]
+
+
+for i in range(6):
+    for j in range(9):
+        if j < 8:
+            print(grid[j][i], end="")
+        else:
+            print(grid[j][i])
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+Write a function named displayInventory() that would take any possible “inventory” and display it like the following:
+Inventory:
+12 arrow
+42 gold coin
+1 rope
+6 torch
+1 dagger
+Total number of items: 62
+
+
+Hint: You can use a for loop to loop through all the keys in a dictionary.
+
+# inventory.py
+stuff = {'rope': 1, 'torch': 6, 'gold coin': 42, 'dagger': 1, 'arrow': 12}
+def displayInventory(inventory):
+ print("Inventory:")
+ item_total = 0
+ for k, v in inventory.items():
+ # FILL THIS PART IN
+ print("Total number of items: " + str(item_total))
+displayInventory(stuff)
+
+
+code :
+
+
+
+stuff = {'rope': 1, 'torch': 6, 'gold coin': 42, 'dagger': 1, 'arrow': 12}
+def displayInventory(inventory):
+    print("Inventory:")
+    item_total = 0
+    for k, v in inventory.items():
+        print(v,'',k)
+        item_total = item_total + v
+        print("Total number of items: " + str(item_total))
+
+displayInventory(stuff)
+
+
+
+---------------------------------------------------------------------------------------------------------
+
+
+Imagine that a vanquished dragon’s loot is represented as a list of strings like this:
+
+dragonLoot = ['gold coin', 'dagger', 'gold coin', 'gold coin', 'ruby']
+
+Write a function named addToInventory(inventory, addedItems), where the inventory parameter is a dictionary representing
+ the player’s inventory (like in the previous project) and the addedItems parameter is a list like dragonLoot.
+
+The addToInventory() function should return a dictionary that represents the updated inventory. Note that the addedItems
+ list can contain multiples of the same item. Your code could look something like this:
+
+def addToInventory(inventory, addedItems):
+ # your code goes here
+inv = {'gold coin': 42, 'rope': 1}
+dragonLoot = ['gold coin', 'dagger', 'gold coin', 'gold coin', 'ruby']
+inv = addToInventory(inv, dragonLoot)
+displayInventory(inv)
+
+
+The previous program (with your displayInventory() function from the previous project) would output the following:
+
+Inventory:
+45 gold coin
+1 rope
+1 ruby
+1 dagger
+Total number of items: 48
+
+code :
+
+
+
+def addtoinventory(inventory,lootlist):
+    for i in range(len(lootlist)):
+        if lootlist[i] in inventory:
+            inventory[lootlist[i]] = inventory[lootlist[i]] + 1
+        else:
+            inventory.setdefault(lootlist[i],1)
+    return inventory
+
+def displayinventory(inventory):
+    total_items = 0
+
+    for k,v in inventory.items():
+        print(str(v) + ' ' ,k )
+
+        total_items = total_items + v
+
+    print("Total number of items: " + str(total_items))
+
+
+inv = {'gold coin': 42, 'rope': 1}
+dragonLoot = ['gold coin', 'dagger', 'gold coin', 'gold coin', 'ruby']
+inv = addtoinventory(inv, dragonLoot)
+displayinventory(inv)
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+Write a function named printTable() that takes a list of lists of strings and displays it in a well-organized table with each column right-justified.
+Assume that all the inner lists will contain the same number of strings.
+For example, the value could look like this:
+tableData = [['apples', 'oranges', 'cherries', 'banana'],
+ ['Alice', 'Bob', 'Carol', 'David'],
+ ['dogs', 'cats', 'moose', 'goose']]
+
+Your printTable() function would print the following:
+ apples Alice dogs
+ oranges Bob cats
+ cherries Carol moose
+ banana David goose
+
+
+
+code :
+
+
+
+tableData = [['apple', 'orange', 'cherries', 'bananas'],
+             ['alice', 'bob', 'carol', 'david'],
+             ['dogs', 'cats', 'moose', 'goose']]
+
+colwidths = ([0] * len(tableData))
+
+for i in range(0, len(colwidths)):
+    mi = [0] * len(tableData[i])
+    for j in range(0, len(mi)):
+        mi[j] = len(tableData[i][j])
+    colwidths[i] = max(mi)
+
+print('column widths= ', colwidths)
+
+for i in range(0, len(tableData[1])):
+    for j in range(0, len(tableData)):
+        print(tableData[j][i].rjust(colwidths[j]), end=' ')
+    print('\n')
+
+
+

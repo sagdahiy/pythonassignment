@@ -1,0 +1,636 @@
+Strong Password Detection
+Write a function that uses regular expressions to make sure the password string it is passed is strong.
+ A strong password is defined as one that is at least eight characters long, contains both uppercase and lowercase 
+characters, and has at least one digit. You may need to test the string against multiple regex patterns to
+ validate its strength.
+
+code :
+
+
+import re
+
+def pwRegex():
+
+
+
+    print ("Please enter a password")
+
+    user_pw = input(" ")
+
+    passGex = re.compile(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{8,15}$')
+
+    pass_w = passGex.search(user_pw)
+    if pass_w :
+
+        print ("Well done")
+    else:
+        print ("Try again")
+
+
+pwRegex()
+
+
+-------------------------------------------------------------------------------------------------------------------------
+Regex Version of strip()
+Write a function that takes a string and does the same thing as the strip() string method. 
+If no other arguments are passed other than the string to strip, then whitespace characters
+ will be removed from the beginning and end of the string. Otherwise, the characters 
+specified in the second argument to the function will be removed from the string.
+
+code :
+
+
+
+import re
+
+def regex_strip(s, chars = None):
+    if chars is None:
+        strip_left = re.compile(r'^\s*')
+        strip_right = re.compile(r'\s*$')
+    else:
+        strip_left = re.compile(r'^[' + re.escape(chars) + r']*')
+        strip_right = re.compile(r'[' + re.escape(chars) + r']*$')
+    s = re.sub(strip_left, "", s)
+    s = re.sub(strip_right, "", s)
+    return s
+s = 'alphabe df bu '
+print(regex_strip(s,"alp"))
+
+
+-------------------------------------------------------------------------------------------------------------
+
+Create a Mad Libs program that reads in text files and lets the user add their own text anywhere the word ADJECTIVE, NOUN, ADVERB, or VERB appears in the text file. 
+
+For example, a text file may look like this:
+
+	The ADJECTIVE panda walked to the NOUN and then VERB. A nearby NOUN was unaffected by these events.
+
+
+
+The program would find these occurrences and prompt the user to replace them.
+
+Enter an adjective:
+silly
+Enter a noun:
+chandelier
+Enter a verb:
+screamed
+Enter a noun:
+pickup truck
+
+
+
+The following text file would then be created:
+
+	The silly panda walked to the chandelier and then screamed. A nearby pickup truck was unaffected by these events.
+
+
+
+The results should be printed to the screen and saved to a new text file.
+
+code :
+
+
+import re
+
+file = open('C:\Users\sagar\Desktop\New folder\solution\test.txt', 'r')
+content = file.read()
+mad_lib_words = list(content.split())
+file.close()
+
+adj_regex = re.compile(r'ADJECTIVE')
+noun_regex = re.compile(r'NOUN')
+adv_regex = re.compile(r'ADVERB')
+verb_regex = re.compile(r'VERB')
+
+result_file = open('C:\Users\sagar\Desktop\New folder\solution\test.txt',  'w')
+result_string = ""
+for word in mad_lib_words:
+    if adj_regex.match(word):
+        word = adj_regex.sub(input("Give an adjective: "), word)
+    elif noun_regex.match(word):
+        word = noun_regex.sub(input("Give a noun: "), word)
+    elif verb_regex.match(word):
+        word = verb_regex.sub(input("Give a verb: "), word)
+    elif adv_regex.match(word):
+        word = adv_regex.sub(input("Give a adverb: "), word)
+    result_string += word + " "
+    result_file.write(word + " ")
+
+print(result_string)
+result_file.close()
+
+----------------------------------------------------------------------------------------------
+Write a program that opens all .txt files in a folder and searches for any line that matches a user-supplied regular expression. The results should be printed to the screen. 
+
+code :
+
+
+import glob, re
+
+destFolder = 'music'
+userRegex = input('Enter your regular expression:\n')
+
+print('these are lines matching your regular expression:')
+for fileName in glob.glob(destFolder + '/*.txt'):
+	txtFile = open(fileName, 'r')
+	pattern = re.compile(r"%s"%userRegex)
+	for line in txtFile:
+		if re.search(pattern, line) is not None:
+			print(line, end='')
+	txtFile.close()
+
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Write a program that walks through a folder tree 
+# and searches for files with a certain file extension (such as .pdf or .jpg).
+# Copy these files from whatever location they are in to a new folder.
+
+import os, shutil
+
+def selectiveCopy(folder, extensions, destFolder):
+	folder = os.path.abspath(folder)
+	destFolder = os.path.abspath(destFolder)
+	print('Looking in', folder, 'for files with extensions of', ', '.join(extensions))
+	for foldername, subfolders, filenames in os.walk(folder):
+		for filename in filenames:
+			name, extension = os.path.splitext(filename)
+			if extension in extensions:
+				fileAbsPath = foldername + os.path.sep + filename
+				print('Coping', fileAbsPath, 'to', destFolder)
+				shutil.copy(fileAbsPath, destFolder)
+
+extensions = ['.pdf', '.jpg']
+folder = 'randomFolder'
+destFolder = 'selectiveFolder'
+selectiveCopy(folder, extensions, destFolder)
+-------------------------------------------------------------------------------------------------------
+Deleting Unneeded Files:
+It’s not uncommon for a few unneeded but humongous files or folders to take up the bulk of the space on your hard drive. If you’re trying to free up room on your computer, you’ll get the most bang for your buck by deleting the most massive of the unwanted files. But first you have to find them.
+Write a program that walks through a folder tree and searches for exceptionally large files or folders—say, ones that have a file size of more than 100MB. (Remember, to get a file’s size, you can use os.path.getsize() from the os module.) Print these files with their absolute path to the screen
+
+
+
+import os
+
+# Default size for gaint is 100MB
+def sd(folder, size = 1024000):
+	folder = os.path.abspath(folder)
+	print('sd', folder, 'for size over', size, 'bytes...')
+	notFound = True
+	for foldername, subfolders, filenames in os.walk(folder):
+		for filename in filenames:
+			fileAbsPath = foldername + os.path.sep + filename
+			if os.path.getsize(fileAbsPath) >= size:
+				notFound = False
+				print('We found a gaint located at', fileAbsPath, 'and it weights', os.path.getsize(fileAbsPath), 'bytes')
+
+	if notFound:
+		print('There is no gaint in your folder, you are safe.')
+
+folder = 'randomFolder'
+size = 10000
+sd(folder,size)
+
+-------------------------------------------------------------------------------------------------
+
+
+# Write a program that finds all files with a given prefix, such as spam001.txt, spam002.txt, and so no, in a single folder
+# and locates any gaps in the numbering (such as if there is a spam001.txt and spam003.txt but no spam002.txt).
+# Have the program that can insert gaps into numbered files so that a new file can be added.
+
+import os
+
+def fillInGapsWithNewFiles(folder, prefix):
+	folder = os.path.abspath(folder)
+	indexList = []
+	extension = None
+	numberLen = None
+	for entry in os.listdir(folder):
+		if os.path.isdir(entry) or not entry.startswith(prefix):
+			continue
+		name, ext = os.path.splitext(entry)
+		currentIndex = int(name[len(prefix):])
+		if extension is None:
+			extension = ext
+		if numberLen is None:
+			numberLen = len(name[len(prefix):])
+		indexList.append(currentIndex)
+
+	indexList.sort()
+	noGap = True
+	for i in range(1, indexList[-1]):
+		if i not in indexList:
+			noGap = False
+			print('We found a gap at', i)
+			newFileName = folder + os.path.sep + prefix + '0'*(numberLen-len(str(i))) + str(i) + extension
+			print('Filling the gap by creating a new file:', newFileName)
+			newFile = open(newFileName, 'w')
+			newFile.close()
+
+	if noGap:
+		print('No gap in all files with the given prefix (', prefix, ')', sep = '')
+
+folder = 'randomFolder'
+prefix = 'spam'
+fillInGapsWithNewFiles(folder, prefix)
+
+------------------------------------------------------------------------------------------------------------------
+The following program is meant to be a simple coin toss guessing game. The player gets two guesses (it’s an easy game). 
+However, the program has several bugs in it. Run through the program a few times to find the bugs that keep
+ the program from working correctly.
+
+
+import random
+guess = ''
+while guess not in ('heads', 'tails'):
+     print('Guess the coin toss! Enter heads or tails:')
+     guess = input()
+     toss = "heads" # 0 is tails, 1 is heads
+     if toss == guess:
+        print('You got it!')
+     else:
+        print('Nope! Guess again!')
+     guesss = input()
+     if toss == guess:
+         print('You got it!')
+     else:
+         print('Nope. You are really bad at this game.')
+
+-------------------------------------------------------------------------------------------------------------------------
+
+# command line emailer.py - email a string of text
+"""
+Write a program that takes an email address and string of text on the command
+line and then, using Selenium, logs into your email account and sends an email
+of the string to the provided address. (You might want to set up a separate email
+account for this program.)
+
+code :
+
+
+
+import time
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+# User input for recipient, subject, and body of the email as well as login information
+email_username = input('What is your username?\n')
+email_password = input('What is your password?\n')
+email_recipient = input('Who would you like to send an email to?\n')
+email_subject = input('What is the subject of the email?\n')
+email_body = input('What would you like to say?\n')
+
+
+browser = webdriver.Chrome()
+browser.maximize_window()
+browser.implicitly_wait(30)
+browser.get('http://mail.google.com')
+login_elem = browser.find_element_by_id('identifierId')
+login_elem.send_keys(email_username)
+next_elem = browser.find_element_by_id('identifierNext')
+next_elem.click()
+time.sleep(3)
+password_elem = browser.find_element_by_name('password')
+password_elem.send_keys(email_password)
+pw_next_elem = browser.find_element_by_id('passwordNext')
+pw_next_elem.click()
+time.sleep(3)
+# This section will change depending on what mail you are using.
+# I found the easiest way was to use keyboard shortcuts.
+# You can select an entire webpage with browser.find_element_by_tag_name('html') and
+# enter your shortcut keys here. In my example, 'c' will open a new message box then you
+# can send the rest of the keys through usint TAB and ENTER.
+html_elem = browser.find_element_by_tag_name('html')
+html_elem.send_keys('c')
+html_elem.send_keys(Keys.TAB)
+html_elem.send_keys(email_recipient)
+html_elem.send_keys(Keys.TAB)
+html_elem.send_keys(email_subject)
+html_elem.send_keys(Keys.TAB)
+html_elem.send_keys(email_body)
+html_elem.send_keys(Keys.ENTER)
+
+print('Email was sent.')
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+Write a program that goes to a photo-sharing site like Flickr or Imgur,
+searches for a category of photos, and then downloads all the resulting images.
+You could write a program that works with any photo site that has a search feature.
+For this project, I decided to download Cyanide & Happiness comics.
+"""
+
+import requests
+import os
+import bs4
+
+
+
+# Make sure you wrap it up in a try/except statement. Some comics won't be able to download. If you don't
+# use a try/except statement your program will crash
+for comic in range(url_image_num):
+    try:
+        # Make a new directory on the desktop
+        os.chdir(r'c:\users\sagar\desktop')
+        os.makedirs('cyanide_and_happiness', exist_ok=True)
+        # This first request is for the initial url, or the last comic image. Don't forget to
+        # res.raise_for_status()
+        res = requests.get(url)
+        res.raise_for_status()
+        # The url for the comic image is inside an <img> tag with an id of 'main-comic'. You can
+        # use BeautifulSoup to obtain this tag and get the src for the url. But you will have to add http:
+        # to the beginning of the comic url.
+        # Then change your res to the new comic url and res.raise_for_status() again!
+        soup = bs4.BeautifulSoup(res.text, 'html.parser')
+        match = soup.find('img', id='main-comic')
+        comic_url = 'http:' + match.get('src')
+        res = requests.get(comic_url)
+        res.raise_for_status()
+
+        print('Downloading C&H' + str(comic + 1).zfill(4) + '...')
+        image_file = open(os.path.join('cyanide_and_happiness', 'C&H' + str(comic + 1).zfill(4)) + '.jpg', 'wb')
+        for chunk in res.iter_content(100000):
+            image_file.write(chunk)
+        image_file.close()
+        comic += 1
+        url_image_num -= 1
+        url = 'http://explosm.net/comics/' + str(url_image_num - 1) + '/'
+        print(url)
+    except requests.exceptions.HTTPError:
+        # If a comic cannot download, we still want to change the url comic number so we can try the next one.
+        # So decrease it by one, then set the url to a new one.
+        print('Could not find comic. ')
+        url_image_num -= 1
+        url = 'http://explosm.net/comics/' + str(url_image_num - 1) + '/'
+        print(url)
+
+
+print('Finished.')
+
+----------------------------------------------------------------------------------------------------------------------
+
+Write a program that, given the URL of a web page, will attempt to download
+every linked page on the page. The program should flag any pages that have
+a 404 “Not Found” status code and print them out as broken links.
+
+code : 
+import requests
+import bs4
+
+
+url = 'https://news.google.co.in/'
+res = requests.get(url)
+res.raise_for_status()
+
+soup = bs4.BeautifulSoup(res.text, 'html.parser')
+
+links = soup.select('a')
+for link in links:
+    link = link.get('href')
+    try:
+        res = requests.get(link)
+        if res.status_code == 404:
+            print('404 for: ' + link)
+        else:
+            print('Working link: ' + link)
+            continue
+    except requests.exceptions.MissingSchema:
+        continue
+
+--------------------------------------------------------------------------------------------------------------
+Write a program that checks the websites of several web comics and automatically downloads the images if the comic
+ was updated since the program’s last visit. Your operating system’s scheduler
+ (Scheduled Tasks on Windows, launchd on OS X, and cron on Linux) can run your Python program once a day.
+ The Python program itself can download the comic and then copy it to your desktop so that it is easy to find.
+ This will free you from having to check the website yourself to see whether it has updated.
+ (A list of web comics is available at http://nostarch.com/automatestuff/.)
+
+code :
+
+import requests
+import os
+import bs4
+import time
+
+os.chdir(r'c:\users\sagar\desktop')
+
+
+comic = 1
+url_image_num = 4980
+
+
+def download_comic():
+    global comic
+    global url_image_num
+    url = 'http://explosm.net/comics/' + str(url_image_num) + '/'
+    try:
+        res = requests.get(url)
+        res.raise_for_status()
+        soup = bs4.BeautifulSoup(res.text, 'html.parser')
+        match = soup.find('img', id='main-comic')
+        comic_url = 'http:' + match.get('src')
+        res = requests.get(comic_url)
+        res.raise_for_status()
+        print('Downloading C&H' + str(comic).zfill(4) + '...')
+        image_file = open('C&H' + str(comic).zfill(4) + '.jpg', 'wb')
+        for chunk in res.iter_content(100000):
+            image_file.write(chunk)
+        image_file.close()
+        comic += 1
+        url_image_num += 1
+        url = 'http://explosm.net/comics/' + str(url_image_num + 1) + '/'
+        print(url)
+    except requests.exceptions.HTTPError:
+        print('No comic was found. Will try again in 8 hours')
+    # I found the easiest way to make this program is to use time.sleep(1)
+    # Put it in a for loop for however many seconds you want (28800 is 8 hours) and it will
+    # complete after that time
+    for second in range(28800):
+        time.sleep(1)
+
+
+# 21 for loops will run for a week straight. You can set these numbers to whatever you want.
+for hour_block in range(21):
+    print('Searching for a new comic')
+    download_comic()
+
+-----------------------------------------------------------------------------------------------------------------------
+
+Random Chore Assignment Emailer:
+Write a program that takes a list of people’s email addresses and a list of chores that need to be done and randomly assigns chores to people. Email each person their assigned chores. If you’re feeling ambitious, keep a record of each person’s previously assigned chores so that you can make sure the program avoids assigning anyone the same chore they did last time. For another possible feature, schedule the program to run once a week automatically.
+
+Here’s a hint: If you pass a list to the random.choice() function, it will return a randomly selected item from the list. Part of your code could look
+like this:
+
+chores = ['dishes', 'bathroom', 'vacuum', 'walk dog']
+randomChore = random.choice(chores)
+chores.remove(randomChore) # this chore is now taken, so remove it
+
+
+import smtplib
+import random
+import time
+
+
+# User information. Change your email and password here.
+# It is recommended you add at least your password as an input.
+user_email = 'youremailaddress@email.com'
+user_pw = 'yourpassword'
+
+# List of email addresses - Edit your email address from here
+emails = ['email1@yahoo.com',
+          'email2@yahoo.com',
+          'email3@gmail.com',
+          'email4@gmail.com']
+
+
+
+def assignment():
+    chores = ['Wash the dishes',
+              'Mop the floor',
+              'Walk the dog',
+              'Feed the cat',
+              'Clean toilet',
+              'Mow the lawn',
+              'Clean the kitchen']
+    for email in emails:
+        random_chore = random.choice(chores)
+        email_dict[email] = random_chore
+        chores.remove(random_chore)
+    for email in email_dict:
+        message = str('Subject: Your random chore is....\n' + email_dict[email])
+        print(email.ljust(27) + ' is assigned: ' + email_dict[email].rjust(23))
+        smtp_obj.sendmail(user_email, email, message)
+
+
+# Empty dictionary to collect emails with chores
+email_dict = {}
+# Logging into the SMTP server - Note: your settings
+# may be different depending on the email you use
+smtp_obj = smtplib.SMTP('smtp.gmail.com', 587)
+smtp_obj.ehlo()
+smtp_obj.starttls()
+smtp_obj.login(user_email, user_pw)
+# Calling the function to send the email every week
+# The program will sleep for 24 hours and run through
+# a loop for seven days.
+for i in range(7):
+    assignment()
+    time.sleep(86400)
+# Logging out of SMTP server
+smtp_obj.quit()
+
+-------------------------------------------------------------------------------------------------------
+
+Umbrella Reminder:
+Use the requests module to scrape data from http://weather.gov/. Write a program that runs just before you wake up in the morning and checks whether it’s raining that day. If so, have the program
+text you a reminder to pack an umbrella before leaving the house.
+
+code :
+
+
+
+import requests
+import bs4
+import time
+import datetime
+# Notice the new way to import the Client module. It's changed
+# from how the book is.
+from twilio.rest import Client
+
+# Enter Twililo account information here
+account_SID = 'YOUR_ACCOUNT_SID'
+auth_token = 'YOUR_AUTH_TOKEN'
+client = Client(account_SID, auth_token)
+my_twilio_number = 'YOUR_TWILIO_NUMBER'
+my_cell_phone = 'YOUR_CELL_NUMBER'
+
+# Download the web page from www.weather.gov
+# This website tracks by zip code. Type in any zip
+# code and pull the url from there. There are MANY ways
+# you can scrape data from this website. I chose to
+# scrape the summaries in the 7 day forceast. Yours
+# may differ.
+start = datetime.datetime(2022, 4, 12, 6, 30)
+# This while loop sleeps until 3:00 in the morning
+while datetime.datetime.now() < start:
+    time.sleep(1)
+for i in range(31):
+    # See cyanide_and_happiness.py to learn how to scrape
+    res = requests.get('https://www.accuweather.com/en/in/khanda/1788774/weather-forecast/1788774')
+    res.raise_for_status()
+    weather_soup = bs4.BeautifulSoup(res.text, "html.parser")
+    match = weather_soup.find('li', class_='forecast-tombstone')
+    # (match.text).lower will match a specific string. I chose t-storm. Once again, yours
+    # may differ. If you find a match, send the text. If not, do nothing but print a message.
+    if 't-storm' in str(match.text).lower():
+        text = str(match.text).strip()
+        print(text)
+        message = client.messages.create(
+            body='Chance of rain today! Don\'t forget to pac an umbrella!',
+            from_=my_twilio_number,
+            to=my_cell_phone)
+    else:
+        print('No rain. No message needed')
+    # Sleeps for one day, the function repeats for 31 days
+    time.sleep(86400)
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+
+Write a program that scans through your email account, finds all the unsubscribe
+links in all your emails, and automatically opens them in a browser. This program
+will have to log in to your email provider’s IMAP server and download all of your
+emails. You can use BeautifulSoup (covered in Chapter 11) to check for any instance
+where the word unsubscribe occurs within an HTML link tag.
+
+code :
+
+
+
+import webbrowser
+import imapclient
+import pyzmail
+import bs4
+
+
+# Email address and password - Edit here (or add as user inputs)
+email_address = 'YOUR EMAIL'
+password = 'YOUR PASSWORD'
+
+# Log into IMAP
+imap_obj = imapclient.IMAPClient('imap.mail.yahoo.com', ssl=True)
+imap_obj.login(email_address, password)
+
+# Open emails and search for 'unsubscribe'
+imap_obj.select_folder('INBOX', readonly=True)
+# I believe this syntax is different than the book shows.
+# You can search multiple links but you need a comma to separate
+# everything or it won't work
+UDSs = imap_obj.search(['BODY', 'unsubscribe', 'SINCE', '01-Jun-2017'])
+raw_messages = imap_obj.fetch(UDSs, ['BODY[]'])
+for message in UDSs:
+    message_list = []
+    # You may need to add the b before 'BODY[]', it's not in the book either
+    # but Google found me a solution that worked
+    message = pyzmail.PyzMessage.factory(raw_messages[message][b'BODY[]'])
+    try:
+        html_obj = message.html_part.get_payload().decode(message.html_part.charset)
+        soup = bs4.BeautifulSoup(html_obj, "html.parser")
+        # We did this in link_verification.py, same idea here.
+        elem = soup.select('a')
+        for i in range(len(elem)):
+            url = elem[i].get('href')
+            if 'unsubscribe' in url:
+                webbrowser.open(url)
+    except:
+        print('Could not parse email')
+imap_obj.logout()
